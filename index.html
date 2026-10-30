@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Live schedule and presenter resources for the November 6 PD Day at Lausanne Collegiate School.">
+<title>November 6 PD Day</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: one printed-schedule column per division (time | session), with each session's live resource links under it. Single light look, Lausanne brand. */
+:root {
+  --navy: #00274C;
+  --gold: #FFCB05;
+  --teal: #1a7fa3;
+  --ink: #142a40;
+  --muted: #5b6e82;
+  --line: #d6dee7;
+  --band: #eef2f6;
+  --paper: #ffffff;
+  --page: #f8fafc;
+  --link-bg: #fff8d6;
+  --danger: #a3262a;
+  --display: "Montserrat", "Arial Black", system-ui, sans-serif;
+  --head: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.sheet {
+  max-width: 920px;
+  margin: 0 auto;
+  padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* Header */
+.eyebrow {
+  margin: 0;
+  font-family: var(--head);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding-bottom: 14px;
+  border-bottom: 3px solid var(--gold);
+}
+
+h1 {
+  margin: 4px 0 0;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(2rem, 7vw, 3rem);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--navy);
+  text-wrap: balance;
+}
+
+.logo {
+  display: block;
+  height: 56px;
+  width: auto;
+  max-width: 100%;
+}
+
+.intro {
+  margin: 14px 0 0;
+  max-width: 62ch;
+  color: var(--muted);
+}
+
+/* Division tabs */
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin: 20px 0 6px;
+  padding: 4px;
+  background: var(--band);
+  border-radius: 10px;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.tab {
+  font: 600 1.05rem/1 var(--head);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--navy);
+  cursor: pointer;
+}
+.tab[aria-selected="true"] { background: var(--navy); color: #fff; }
+.tab:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+/* Sessions */
+.sessions { list-style: none; margin: 0; padding: 0; }
+
+.session {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 4px 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.when { font-family: var(--head); }
+.when time { display: block; font-weight: 700; font-size: 1.2rem; color: var(--navy); font-variant-numeric: tabular-nums; }
+.when small { display: block; color: var(--muted); font-family: var(--body); font-size: 0.82rem; margin-top: 2px; }
+
+.now-pill {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--navy);
+  font: 700 0.75rem/1.4 var(--head);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.session:not(.is-now) .now-pill { display: none; }
+.session.is-now { background: linear-gradient(90deg, #fffbe6, transparent 60%); }
+
+.what h2 {
+  margin: 0 0 4px;
+  font-family: var(--head);
+  font-weight: 700;
+  font-size: 1.45rem;
+  line-height: 1.15;
+  color: var(--navy);
+  text-wrap: balance;
+}
+
+.meta { margin: 2px 0 0; font-size: 0.95rem; }
+.meta b { font-weight: 600; color: var(--muted); }
+.note { margin: 2px 0 0; font-size: 0.92rem; color: var(--muted); font-style: italic; }
+
+.session.lunch { background: var(--band); padding: 12px 0; }
+.session.lunch .when time { padding-left: 12px; }
+.session.lunch h2 { margin: 0; letter-spacing: 0.14em; text-transform: uppercase; font-size: 1.25rem; }
+
+.see-joint { color: var(--teal); font-weight: 600; text-decoration: none; }
+.see-joint:hover { text-decoration: underline; }
+
+/* Joint sessions */
+.joint {
+  margin-top: 36px;
+  border-top: 6px solid var(--navy);
+  background: var(--band);
+  padding: 18px 18px 8px;
+}
+.joint-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.joint-head h2 {
+  margin: 0;
+  font: 700 1.15rem/1.2 var(--head);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+.joint-head time { font: 700 1.1rem/1.2 var(--head); color: var(--navy); font-variant-numeric: tabular-nums; }
+.joint-grid {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 24px;
+}
+.joint-item { border-top: 3px solid var(--gold); padding: 12px 0 16px; min-width: 0; }
+.joint-item h3 { margin: 0 0 4px; font: 700 1.1rem/1.2 var(--head); color: var(--navy); text-wrap: balance; }
+
+/* Resources */
+.resources { margin-top: 12px; min-width: 0; }
+.res-label {
+  margin: 0 0 6px;
+  font: 700 0.78rem/1 var(--head);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.res-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.res-empty { color: var(--muted); font-size: 0.9rem; }
+
+.res-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: var(--link-bg);
+  border-left: 4px solid var(--gold);
+  border-radius: 0 6px 6px 0;
+  min-width: 0;
+}
+.res-item a {
+  flex: 1;
+  min-width: 0;
+  color: var(--navy);
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.res-item a:hover { text-decoration: underline; }
+.res-item a:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.res-item .src { display: block; font-weight: 400; font-size: 0.82rem; color: var(--muted); }
+
+.btn {
+  font: 600 0.9rem/1 var(--body);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 2px solid var(--navy);
+  background: var(--paper);
+  color: var(--navy);
+  cursor: pointer;
+}
+.btn:hover { background: var(--navy); color: #fff; }
+.btn.primary { background: var(--navy); color: #fff; }
+.btn.primary:hover { background: #0b3a66; }
+.btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.btn:disabled { opacity: 0.6; cursor: default; }
+.btn-remove {
+  flex: none;
+  border: 0;
+  background: none;
+  color: var(--danger);
+  font: 600 0.82rem/1 var(--body);
+  cursor: pointer;
+  padding: 4px;
+}
+.btn-remove:focus-visible { outline: 2px solid var(--danger); }
+
+.add-row { margin-top: 8px; }
+
+.add-form {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto auto;
+  gap: 8px;
+  align-items: end;
+}
+.add-form label { display: flex; flex-direction: column; gap: 3px; font-size: 0.8rem; font-weight: 600; color: var(--muted); min-width: 0; }
+.add-form input {
+  font: 400 0.95rem var(--body);
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  min-width: 0;
+}
+.add-form input:focus { outline: 2px solid var(--teal); outline-offset: 0; border-color: var(--teal); }
+.add-form .who { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; }
+.add-form .who label { flex: 1 1 200px; }
+.add-form label[hidden] { display: none; }
+.form-msg { grid-column: 1 / -1; margin: 0; font-size: 0.85rem; color: var(--danger); }
+
+.status { margin: 6px 0 0; font-size: 0.88rem; color: var(--muted); }
+
+@media (max-width: 640px) {
+  .session { grid-template-columns: 1fr; }
+  .session.lunch .when time { padding-left: 12px; }
+  .joint-grid { grid-template-columns: 1fr; }
+  .add-form { grid-template-columns: 1fr 1fr; }
+  .add-form label { grid-column: 1 / -1; }
+  .logo { height: 44px; }
+  .tab { padding: 10px 12px; font-size: 1rem; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .res-item { animation: arrive 0.4s ease-out; }
+  @keyframes arrive { from { background: #ffe680; } to { background: var(--link-bg); } }
+}
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <header>
+    <div class="masthead">
+      <div>
+        <p class="eyebrow">November 6 PD Day · Live schedule</p>
+        <h1 id="division-title">Lower School</h1>
+      </div>
+      <img class="logo" alt="Lausanne Collegiate School" width="469" height="132" src="lausanne-logo.png">
+    </div>
+    <p class="intro" id="intro">Presenters add slides, handouts and links to their session. They show up here for everyone within a few seconds, with no need to refresh.</p>
+    <div class="tabs" role="tablist" aria-label="Division">
+      <button class="tab" role="tab" id="tab-lower" data-div="lower" aria-selected="true">Lower School</button>
+      <button class="tab" role="tab" id="tab-middle" data-div="middle" aria-selected="false">Middle School</button>
+      <button class="tab" role="tab" id="tab-upper" data-div="upper" aria-selected="false">Upper School</button>
+    </div>
+    <p class="status" id="status" hidden></p>
+  </header>
+
+  <main id="schedule" role="tabpanel" aria-labelledby="tab-lower"></main>
+</div>
+
+<script>
+(function () {
+  // ---- Schedule data. "key" ties a session's links together, so the same session in several divisions shares one list.
+  const SCHEDULE = {
+    lower: {
+      name: "Lower School",
+      rows: [
+        { time: "8:00–9:00", key: "ls-ac-prep", title: "Prep for upcoming AC Work", leaders: "Joy Stephens, Erica McBride", focus: "Subject-specific standards; prepare for cross-divisional conversations with MS and US" },
+        { time: "9:00–10:00", key: "toddle-ai", title: "Toddle AI", leaders: "Alejandro Romero (Toddle)", focus: "AI features in Toddle; why tagged standards matter" },
+        { time: "10:00–11:00", key: "ls-units", title: "Upcoming Units of Study", leaders: "Joy Stephens, Erica McBride", focus: "Structured PYP unit planning ahead of AC unit work" },
+        { time: "11:00–12:00", key: "ls-map", title: "MAP Grade-Level Case Studies", leaders: "Grade-level teams (Grades 1–4), Stephen Campbell", focus: "Each grade presents trends across the grade level, beyond the classroom" },
+        { time: "12:00–1:00", lunch: true },
+        { time: "1:00–2:00", key: "ai-partner", title: "AI as a Teaching Partner", leaders: "Courtney Mark", focus: "AI as designer, analyst, and coach" },
+        { time: "2:00–3:00", key: "toddle-workflow", title: "Toddle Workflow Workshop", leaders: "Alejandro Romero (Toddle), Kara Barbour", focus: "Support for Toddle" }
+      ]
+    },
+    middle: {
+      name: "Middle School",
+      joint: true,
+      rows: [
+        { time: "8:00–9:00", key: "toddle-ai", title: "Toddle AI", leaders: "Alejandro Romero (Toddle)", focus: "AI features in Toddle; why tagged standards and MYP criteria matter" },
+        { time: "9:00–10:00", jointLink: true },
+        { time: "10:00–11:00", key: "ai-partner", title: "AI as a Teaching Partner", leaders: "Courtney Mark", focus: "AI as designer, analyst, and coach" },
+        { time: "11:00–12:00", key: "toddle-workflow", title: "Toddle Workflow Workshop", leaders: "Alejandro Romero (Toddle), John Donecker", focus: "Support for Toddle" },
+        { time: "12:00–1:00", lunch: true },
+        { time: "1:00–2:00", key: "ms-ef", title: "Executive Functioning", leaders: "Kelly Douglas (Grades 5–6), Kim Knauss (Grades 7–8)", focus: "Meeting student executive functioning needs" },
+        { time: "2:00–3:00", key: "ms-breakouts", title: "Subject Breakouts: Assessment Design and Standardization", leaders: "Department coordinators", focus: "Standardize grading and command terms; dysgraphia formatting; tests that fit 60 minutes with time-and-a-half; cross-grade summative show and tell" }
+      ]
+    },
+    upper: {
+      name: "Upper School",
+      joint: true,
+      rows: [
+        { time: "8:00–9:00", key: "ai-partner", title: "AI as a Teaching Partner", leaders: "Courtney Mark", focus: "AI as designer, analyst, and coach" },
+        { time: "9:00–10:00", jointLink: true },
+        { time: "10:00–11:00", key: "toddle-ai", title: "Toddle AI", leaders: "Alejandro Romero (Toddle), Wade Linebaugh", focus: "AI features in Toddle; why tagged standards and DP/MYP criteria matter" },
+        { time: "11:00–12:00", key: "us-dept", title: "Department Time", leaders: "Department Chairs", focus: "Standardized assessment and unit alignment (Science to work on Group 4 grading)" },
+        { time: "12:00–1:00", lunch: true },
+        { time: "1:00–2:00", key: "toddle-workflow", title: "Toddle Workflow Workshop", note: "Science can continue to work on Group 4 grading.", leaders: "Alejandro Romero (Toddle), Stuart Dunster", focus: "Support for Toddle" },
+        { time: "2:00–3:00", key: "us-accommodations", title: "Classroom Accommodations", leaders: "Jamilyn Cole", focus: "Supporting students with accommodations in US classrooms" }
+      ]
+    }
+  };
+
+  const JOINT = {
+    time: "9:00–10:00",
+    rows: [
+      { key: "joint-math", title: "MS and US Math: MAP Sharing", leaders: "Kyle Gehringer" },
+      { key: "joint-english", title: "MS and US English: MAP Sharing", leaders: "Natalie Thomas" },
+      { key: "joint-science", title: "MS and US Science: MAP Proctoring Training", leaders: "Michelle Spain" },
+      { key: "joint-growth", title: "MS and US World Languages, Individuals and Societies (Social Studies), Arts, Design, and Physical Education and Health: Standardized K–12 Growth Assessments", leaders: "Subject Leads", focus: "Refine and finish the standardized K–12 growth assessments; plan their implementation" }
+    ]
+  };
+
+  // ---- Link list: a Google Sheet behind an Apps Script web app. Paste its URL (ends in /exec) here.
+  const API_URL = "";
+  const REFRESH_MS = 20000;
+
+  let links = [];
+  let linksKey = "";
+  let linksLoaded = false;
+  let openForm = null;           // key of the session whose add form is open
+  let formNode = null;           // kept across refreshes so typing isn't lost
+  let active = "lower";
+
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} }
+  };
+  // Links added from this browser: id -> remove token
+  let mine = {};
+  try { mine = JSON.parse(store.get("pd-mine") || "{}") || {}; } catch (e) {}
+
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const el = (tag, cls, text) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  };
+
+  // ---- Division choice: #lower / #middle / #upper on the link, else the last one this viewer used
+  const fromHash = location.hash.replace("#", "");
+  if (SCHEDULE[fromHash]) active = fromHash;
+  else {
+    const saved = store.get("pd-division");
+    if (SCHEDULE[saved]) active = saved;
+  }
+
+  document.querySelectorAll(".tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      active = btn.dataset.div;
+      closeForm();
+      store.set("pd-division", active);
+      render();
+    });
+  });
+
+  // ---- Rendering
+  function sessionWhat(row, headingTag) {
+    const what = el("div", "what");
+    what.appendChild(el(headingTag, null, row.title));
+    if (row.note) what.appendChild(el("p", "note", row.note));
+    if (row.leaders) {
+      const p = el("p", "meta");
+      p.appendChild(el("b", null, "Led by: "));
+      p.appendChild(document.createTextNode(row.leaders));
+      what.appendChild(p);
+    }
+    if (row.focus) {
+      const p = el("p", "meta");
+      p.appendChild(el("b", null, "Focus: "));
+      p.appendChild(document.createTextNode(row.focus));
+      what.appendChild(p);
+    }
+    const res = el("div", "resources");
+    res.dataset.key = row.key;
+    what.appendChild(res);
+    return what;
+  }
+
+  function render() {
+    const div = SCHEDULE[active];
+    $("#division-title").textContent = div.name;
+    document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.div === active)));
+    $("#schedule").setAttribute("aria-labelledby", "tab-" + active);
+
+    const main = $("#schedule");
+    main.replaceChildren();
+    const list = el("ol", "sessions");
+
+    div.rows.forEach(row => {
+      const li = el("li", "session" + (row.lunch ? " lunch" : ""));
+      li.dataset.time = row.time;
+      const when = el("div", "when");
+      when.appendChild(el("time", null, row.time));
+      if (!row.lunch && !row.jointLink) when.appendChild(el("small", null, "Location: TBD"));
+      when.appendChild(el("span", "now-pill", "Happening now"));
+      li.appendChild(when);
+
+      if (row.lunch) {
+        const what = el("div", "what");
+        what.appendChild(el("h2", null, "Lunch"));
+        li.appendChild(what);
+      } else if (row.jointLink) {
+        const what = el("div", "what");
+        what.appendChild(el("h2", null, "MS/US Joint Sessions"));
+        const a = el("a", "see-joint", "See the joint sessions below");
+        a.href = "#joint";
+        a.addEventListener("click", e => { e.preventDefault(); $("#joint").scrollIntoView({ behavior: "smooth", block: "start" }); });
+        what.appendChild(a);
+        li.appendChild(what);
+      } else {
+        li.appendChild(sessionWhat(row, "h2"));
+      }
+      list.appendChild(li);
+    });
+    main.appendChild(list);
+
+    if (div.joint) {
+      const sec = el("section", "joint");
+      sec.id = "joint";
+      sec.dataset.time = JOINT.time;
+      const head = el("div", "joint-head");
+      head.appendChild(el("h2", null, "MS/US Joint Sessions"));
+      head.appendChild(el("time", null, JOINT.time));
+      sec.appendChild(head);
+      const grid = el("ul", "joint-grid");
+      JOINT.rows.forEach(row => {
+        const li = el("li", "joint-item");
+        li.appendChild(sessionWhat(row, "h3"));
+        grid.appendChild(li);
+      });
+      sec.appendChild(grid);
+      main.appendChild(sec);
+    }
+
+    renderAllResources();
+    markNow();
+  }
+
+  function linksFor(key) {
+    return links.filter(it => it && it.session === key).sort((a, b) => (a.at || 0) - (b.at || 0));
+  }
+
+  function hostOf(url) {
+    try { return new URL(url).hostname.replace(/^www\./, ""); } catch (e) { return ""; }
+  }
+
+  function safeUrl(url) {
+    try {
+      const u = new URL(url);
+      return (u.protocol === "https:" || u.protocol === "http:") ? u.href : null;
+    } catch (e) { return null; }
+  }
+
+  function renderResources(box) {
+    const key = box.dataset.key;
+    box.replaceChildren();
+    if (!API_URL) return;
+    if (!linksLoaded) {
+      box.appendChild(el("p", "res-empty", "Loading resources…"));
+      return;
+    }
+
+    const items = linksFor(key);
+    box.appendChild(el("p", "res-label", "Resources"));
+    if (!items.length) {
+      box.appendChild(el("p", "res-empty", "No resources yet."));
+    } else {
+      const ul = el("ul", "res-list");
+      items.forEach(it => {
+        const href = safeUrl(it.url);
+        if (!href) return;
+        const li = el("li", "res-item");
+        const a = el("a");
+        a.href = href;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.textContent = it.title || hostOf(href) || href;
+        a.appendChild(el("span", "src", [hostOf(href), it.name ? "Shared by " + it.name : ""].filter(Boolean).join(" · ")));
+        li.appendChild(a);
+        if (mine[it.id]) {
+          const rm = el("button", "btn-remove", "Remove");
+          rm.type = "button";
+          rm.setAttribute("aria-label", "Remove " + (it.title || "this link"));
+          rm.addEventListener("click", () => removeLink(it, rm));
+          li.appendChild(rm);
+        }
+        ul.appendChild(li);
+      });
+      box.appendChild(ul);
+    }
+
+    if (openForm === key && formNode) {
+      box.appendChild(formNode);
+    } else {
+      const row = el("div", "add-row");
+      const btn = el("button", "btn", "+ Add a link");
+      btn.type = "button";
+      btn.addEventListener("click", () => {
+        openForm = key;
+        formNode = buildForm(key);
+        renderAllResources();
+        const first = formNode.querySelector("input:not([type=hidden])");
+        if (first) first.focus();
+      });
+      row.appendChild(btn);
+      box.appendChild(row);
+    }
+  }
+
+  function closeForm() {
+    openForm = null;
+    formNode = null;
+  }
+
+  function field(labelText, attrs) {
+    const label = el("label", null, labelText);
+    const input = el("input");
+    Object.assign(input, { autocomplete: "off" }, attrs);
+    label.appendChild(input);
+    return [label, input];
+  }
+
+  function buildForm(key) {
+    const form = el("form", "add-form");
+    form.noValidate = true;
+
+    const who = el("div", "who");
+    const [lName, name] = field("Your name (optional)", { id: "name-" + key, maxLength: 60, placeholder: "Courtney Mark", value: store.get("pd-name") || "" });
+    who.appendChild(lName);
+    const savedCode = store.get("pd-code");
+    const [lCode, code] = field("Presenter code", { id: "code-" + key, maxLength: 60, value: savedCode || "" });
+    lCode.hidden = !!savedCode;
+    who.appendChild(lCode);
+
+    const [l1, title] = field("Name", { id: "title-" + key, maxLength: 120, placeholder: "Session slides" });
+    const [l2, url] = field("Link", { id: "url-" + key, type: "url", inputMode: "url", maxLength: 2000, placeholder: "https://…" });
+
+    const add = el("button", "btn primary", "Add");
+    add.type = "submit";
+    const cancel = el("button", "btn", "Cancel");
+    cancel.type = "button";
+    cancel.addEventListener("click", () => { closeForm(); renderAllResources(); });
+
+    const msg = el("p", "form-msg");
+    msg.hidden = true;
+    const fail = (text, focus) => { msg.textContent = text; msg.hidden = false; if (focus) focus.focus(); };
+
+    form.append(who, l1, l2, add, cancel, msg);
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      let raw = url.value.trim();
+      if (raw && !/^[a-z][a-z0-9+.-]*:/i.test(raw)) raw = "https://" + raw;
+      const href = safeUrl(raw);
+      if (!href) return fail("Paste a full web link, like https://docs.google.com/…", url);
+      if (!code.value.trim()) { lCode.hidden = false; return fail("Enter the presenter code from Courtney Mark.", code); }
+      add.disabled = true;
+      try {
+        const res = await api({ action: "add", code: code.value.trim(), session: key, title: title.value.trim(), url: href, name: name.value.trim() });
+        store.set("pd-code", code.value.trim());
+        store.set("pd-name", name.value.trim() || null);
+        mine[res.id] = res.token;
+        store.set("pd-mine", JSON.stringify(mine));
+        closeForm();
+        await load(true);
+      } catch (err) {
+        add.disabled = false;
+        if (err.code === "bad_code") {
+          store.set("pd-code", null);
+          lCode.hidden = false;
+          code.value = "";
+          return fail("That presenter code didn't work. Check it with Courtney Mark.", code);
+        }
+        fail(errorText(err));
+      }
+    });
+    return form;
+  }
+
+  function errorText(err) {
+    const code = err && err.code;
+    if (code === "bad_url") return "Paste a full web link, like https://docs.google.com/…";
+    if (code === "full") return "The link list is full. Ask Courtney Mark to remove some old links.";
+    return "That didn't save. Check your connection and try again.";
+  }
+
+  async function api(payload) {
+    // text/plain keeps this a simple request, which Apps Script accepts from any site
+    const res = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
+    const data = await res.json();
+    if (!data.ok) { const err = new Error(data.error); err.code = data.error; throw err; }
+    return data;
+  }
+
+  async function removeLink(it, btn) {
+    btn.disabled = true;
+    try {
+      await api({ action: "remove", code: store.get("pd-code") || "", id: it.id, token: mine[it.id] });
+      delete mine[it.id];
+      store.set("pd-mine", JSON.stringify(mine));
+      await load(true);
+    } catch (err) {
+      btn.disabled = false;
+      setStatus(err.code === "not_found" ? "That link was already removed." : errorText(err));
+    }
+  }
+
+  function renderAllResources() {
+    document.querySelectorAll(".resources").forEach(renderResources);
+  }
+
+  function setStatus(text) {
+    const s = $("#status");
+    s.textContent = text || "";
+    s.hidden = !text;
+  }
+
+  // ---- "Happening now" on the day itself, in Memphis time
+  function memphisNow() {
+    const parts = {};
+    new Intl.DateTimeFormat("en-US", { timeZone: "America/Chicago", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+      .formatToParts(new Date()).forEach(p => { parts[p.type] = p.value; });
+    return { date: parts.year + "-" + parts.month + "-" + parts.day, minutes: Number(parts.hour) * 60 + Number(parts.minute) };
+  }
+
+  function toMinutes(t) {
+    const [h, m] = t.split(":").map(Number);
+    return ((h < 7 ? h + 12 : h) * 60) + m; // 1:00–3:00 are afternoon
+  }
+
+  function markNow() {
+    const now = memphisNow();
+    const today = now.date === "2026-11-06";
+    document.querySelectorAll("[data-time]").forEach(node => {
+      const [start, end] = node.dataset.time.split("–");
+      const on = today && now.minutes >= toMinutes(start) && now.minutes < toMinutes(end);
+      node.classList.toggle("is-now", on);
+    });
+  }
+  setInterval(markNow, 60000);
+
+  // ---- Refresh the link list every few seconds, and right away when the tab comes back
+  async function load(force) {
+    try {
+      const res = await fetch(API_URL, { cache: "no-store" });
+      const data = await res.json();
+      const next = Array.isArray(data.links) ? data.links : [];
+      const nextKey = JSON.stringify(next);
+      setStatus("");
+      if (!force && linksLoaded && nextKey === linksKey) return;
+      links = next;
+      linksKey = nextKey;
+      linksLoaded = true;
+      renderAllResources();
+    } catch (e) {
+      if (!linksLoaded) { linksLoaded = true; renderAllResources(); }
+      setStatus("Can't reach the resource list right now. Trying again…");
+    }
+  }
+
+  render();
+  if (API_URL) {
+    load();
+    setInterval(() => { if (!document.hidden) load(); }, REFRESH_MS);
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
+  } else {
+    setStatus("Resource links aren't connected yet.");
+  }
+})();
+</script>
+</body>
+</html>
