@@ -595,10 +595,6 @@ h1 {
     const who = el("div", "who");
     const [lName, name] = field("Your name (optional)", { id: "name-" + key, maxLength: 60, placeholder: "Courtney Mark", value: store.get("pd-name") || "" });
     who.appendChild(lName);
-    const savedCode = store.get("pd-code");
-    const [lCode, code] = field("Presenter code", { id: "code-" + key, maxLength: 60, value: savedCode || "" });
-    lCode.hidden = !!savedCode;
-    who.appendChild(lCode);
 
     const [l1, title] = field("Name", { id: "title-" + key, maxLength: 120, placeholder: "Session slides" });
     const [l2, url] = field("Link", { id: "url-" + key, type: "url", inputMode: "url", maxLength: 2000, placeholder: "https://…" });
@@ -620,11 +616,9 @@ h1 {
       if (raw && !/^[a-z][a-z0-9+.-]*:/i.test(raw)) raw = "https://" + raw;
       const href = safeUrl(raw);
       if (!href) return fail("Paste a full web link, like https://docs.google.com/…", url);
-      if (!code.value.trim()) { lCode.hidden = false; return fail("Enter the presenter code from Courtney Mark.", code); }
       add.disabled = true;
       try {
-        const res = await api({ action: "add", code: code.value.trim(), session: key, title: title.value.trim(), url: href, name: name.value.trim() });
-        store.set("pd-code", code.value.trim());
+        const res = await api({ action: "add", session: key, title: title.value.trim(), url: href, name: name.value.trim() });
         store.set("pd-name", name.value.trim() || null);
         mine[res.id] = res.token;
         store.set("pd-mine", JSON.stringify(mine));
@@ -632,12 +626,6 @@ h1 {
         await load(true);
       } catch (err) {
         add.disabled = false;
-        if (err.code === "bad_code") {
-          store.set("pd-code", null);
-          lCode.hidden = false;
-          code.value = "";
-          return fail("That presenter code didn't work. Check it with Courtney Mark.", code);
-        }
         fail(errorText(err));
       }
     });
@@ -662,7 +650,7 @@ h1 {
   async function removeLink(it, btn) {
     btn.disabled = true;
     try {
-      await api({ action: "remove", code: store.get("pd-code") || "", id: it.id, token: mine[it.id] });
+      await api({ action: "remove", id: it.id, token: mine[it.id] });
       delete mine[it.id];
       store.set("pd-mine", JSON.stringify(mine));
       await load(true);
