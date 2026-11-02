@@ -161,6 +161,8 @@ h1 {
 
 .meta { margin: 2px 0 0; font-size: 0.95rem; }
 .meta b { font-weight: 600; color: var(--muted); }
+.desc { margin: 6px 0 0; font-size: 0.95rem; max-width: 62ch; }
+.when .room { color: var(--teal); font-weight: 600; }
 .note { margin: 2px 0 0; font-size: 0.92rem; color: var(--muted); font-style: italic; }
 
 .session.lunch { background: var(--band); padding: 12px 0; }
@@ -326,54 +328,61 @@ h1 {
 <script>
 (function () {
   // ---- Schedule data. "key" ties a session's links together, so the same session in several divisions shares one list.
+  // Descriptions shared by sessions that run in more than one division
+  const DESC = {
+    toddleAi: "Alejandro from Toddle demonstrates the AI features built into Toddle and shows what they make possible for teachers. He connects these features to the work teachers already do, such as tagging standards and entering IB criteria, so teachers see the value of that work in practice.",
+    toddleWorkflow: "Teachers bring specific Toddle workflow questions to Alejandro for a discussion. Teachers who don’t have questions will work on units and grading.",
+    aiPartner: "Courtney leads teachers beyond quick tasks like drafting emails to using AI as a designer, analyst, and coach.",
+    mapSharing: "Middle and Upper School math and English teachers share how they have used their MAP data since the fall training."
+  };
   const SCHEDULE = {
     lower: {
       name: "Lower School",
       rows: [
-        { time: "8:00–9:00", key: "ls-ac-prep", title: "Prep for upcoming AC Work", leaders: "Joy Stephens, Erica McBride", focus: "Subject-specific standards; prepare for cross-divisional conversations with MS and US" },
-        { time: "9:00–10:00", key: "toddle-ai", title: "Toddle AI", leaders: "Alejandro Romero (Toddle)", focus: "AI features in Toddle; why tagged standards matter" },
-        { time: "10:00–11:00", key: "ls-units", title: "Upcoming Units of Study", leaders: "Joy Stephens, Erica McBride", focus: "Structured PYP unit planning ahead of AC unit work" },
-        { time: "11:00–12:00", key: "ls-map", title: "MAP Grade-Level Case Studies", leaders: "Grade-level teams (Grades 1–4), Stephen Campbell", focus: "Each grade presents trends across the grade level, beyond the classroom" },
+        { time: "8:00–8:50", key: "ls-ac-prep", title: "Standards Alignment", leaders: "Joy Stephens, Erica McBride", desc: "Lower School teachers work through their subject-specific standards with Joy and Erica. This session prepares teachers for cross-divisional curriculum conversations with Middle and Upper School colleagues that begin with upcoming Academic Council unit work." },
+        { time: "9:00–9:50", key: "toddle-ai", title: "Toddle AI", room: "Alumni Dining Hall", leaders: "Alejandro Romero (Toddle)", desc: DESC.toddleAi },
+        { time: "10:00–10:50", key: "ls-units", title: "Curriculum Skills", leaders: "Joy Stephens, Erica McBride", desc: "Lower School teachers work on curriculum skills." },
+        { time: "11:00–11:50", key: "ls-map", title: "MAP Grade-Level Case Studies", leaders: "Grade-level teams (Grades 1–4), Stephen Campbell", desc: "Each grade-level team (Grades 1–4) presents how it uses MAP results. Teams look at trends across the grade level and present them as a case study." },
         { time: "12:00–1:00", lunch: true },
-        { time: "1:00–2:00", key: "ai-partner", title: "AI as a Teaching Partner", leaders: "Courtney Mark", focus: "AI as designer, analyst, and coach" },
-        { time: "2:00–3:00", key: "toddle-workflow", title: "Toddle Workflow Workshop", leaders: "Alejandro Romero (Toddle), Kara Barbour", focus: "Support for Toddle" }
+        { time: "1:00–1:50", key: "ai-partner", title: "AI as a Teaching Partner", room: "2nd Floor Library", leaders: "Courtney Mark", desc: DESC.aiPartner },
+        { time: "2:00–2:50", key: "toddle-workflow", title: "Toddle Workflow Workshop", leaders: "Alejandro Romero (Toddle), Kara Barbour", desc: DESC.toddleWorkflow }
       ]
     },
     middle: {
       name: "Middle School",
       joint: true,
       rows: [
-        { time: "8:00–9:00", key: "toddle-ai", title: "Toddle AI", leaders: "Alejandro Romero (Toddle)", focus: "AI features in Toddle; why tagged standards and MYP criteria matter" },
-        { time: "9:00–10:00", jointLink: true },
-        { time: "10:00–11:00", key: "ai-partner", title: "AI as a Teaching Partner", leaders: "Courtney Mark", focus: "AI as designer, analyst, and coach" },
-        { time: "11:00–12:00", key: "toddle-workflow", title: "Toddle Workflow Workshop", leaders: "Alejandro Romero (Toddle), John Donecker", focus: "Support for Toddle" },
+        { time: "8:00–8:50", key: "toddle-ai", title: "Toddle AI", room: "Alumni Dining Hall", leaders: "Alejandro Romero (Toddle)", desc: DESC.toddleAi },
+        { time: "9:00–9:50", jointLink: true },
+        { time: "10:00–10:50", key: "ai-partner", title: "AI as a Teaching Partner", room: "2nd Floor Library", leaders: "Courtney Mark", desc: DESC.aiPartner },
+        { time: "11:00–11:50", key: "toddle-workflow", title: "Toddle Workflow Workshop", leaders: "Alejandro Romero (Toddle), John Donecker", desc: DESC.toddleWorkflow },
         { time: "12:00–1:00", lunch: true },
-        { time: "1:00–2:00", key: "ms-ef", title: "Executive Functioning", leaders: "Kelly Douglas (Grades 5–6), Kim Knauss (Grades 7–8)", focus: "Meeting student executive functioning needs" },
-        { time: "2:00–3:00", key: "ms-breakouts", title: "Subject Breakouts: Assessment Design and Standardization", leaders: "Department coordinators", focus: "Standardize grading and command terms; dysgraphia formatting; tests that fit 60 minutes with time-and-a-half; cross-grade summative show and tell" }
+        { time: "1:00–1:50", key: "ms-ef", title: "Executive Functioning", leaders: "Kelly Douglas (Grades 5–6), Kim Knauss (Grades 7–8)", desc: "Learning specialists Kelly and Kim lead grade-band sessions (Grades 5–6 and Grades 7–8) on recognizing and supporting students’ executive functioning needs in the classroom." },
+        { time: "2:00–2:50", key: "ms-breakouts", title: "Subject Breakouts: Assessment Design and Standardization", leaders: "Department coordinators", desc: "Middle School departments bring current summatives and standardize grading and command terms. Teams adjust formatting for students with dysgraphia, design tests that students with time-and-a-half can finish in 60 minutes, and share summatives across Grades 5–8." }
       ]
     },
     upper: {
       name: "Upper School",
       joint: true,
       rows: [
-        { time: "8:00–9:00", key: "ai-partner", title: "AI as a Teaching Partner", leaders: "Courtney Mark", focus: "AI as designer, analyst, and coach" },
-        { time: "9:00–10:00", jointLink: true },
-        { time: "10:00–11:00", key: "toddle-ai", title: "Toddle AI", leaders: "Alejandro Romero (Toddle), Wade Linebaugh", focus: "AI features in Toddle; why tagged standards and DP/MYP criteria matter" },
-        { time: "11:00–12:00", key: "us-dept", title: "Department Time", leaders: "Department Chairs", focus: "Standardized assessment and unit alignment (Science to work on Group 4 grading)" },
+        { time: "8:00–8:50", key: "ai-partner", title: "AI as a Teaching Partner", room: "2nd Floor Library", leaders: "Courtney Mark", desc: DESC.aiPartner },
+        { time: "9:00–9:50", jointLink: true },
+        { time: "10:00–10:50", key: "toddle-ai", title: "Toddle AI", room: "Alumni Dining Hall", leaders: "Alejandro Romero (Toddle)", desc: DESC.toddleAi },
+        { time: "11:00–11:50", key: "us-dept", title: "Assessment Design and Standardization", leaders: "Department Chairs", desc: "Upper School departments work on standardizing assessments and aligning their units. Science uses the time for CSP grading." },
         { time: "12:00–1:00", lunch: true },
-        { time: "1:00–2:00", key: "toddle-workflow", title: "Toddle Workflow Workshop", note: "Science can continue to work on Group 4 grading.", leaders: "Alejandro Romero (Toddle), Stuart Dunster", focus: "Support for Toddle" },
-        { time: "2:00–3:00", key: "us-accommodations", title: "Classroom Accommodations", leaders: "Jamilyn Cole", focus: "Supporting students with accommodations in US classrooms" }
+        { time: "1:00–1:50", key: "toddle-workflow", title: "Toddle Workflow Workshop", note: "Science can continue CSP grading.", leaders: "Alejandro Romero (Toddle), Stuart Dunster", desc: DESC.toddleWorkflow },
+        { time: "2:00–2:50", key: "us-accommodations", title: "Classroom Accommodations", leaders: "Jamilyn Cole", desc: "Jamilyn leads Upper School teachers through practical strategies for supporting students with accommodations in the classroom." }
       ]
     }
   };
 
   const JOINT = {
-    time: "9:00–10:00",
+    time: "9:00–9:50",
     rows: [
-      { key: "joint-math", title: "MS and US Math: MAP Sharing", leaders: "Kyle Gehringer" },
-      { key: "joint-english", title: "MS and US English: MAP Sharing", leaders: "Natalie Thomas" },
-      { key: "joint-science", title: "MS and US Science: MAP Proctoring Training", leaders: "Michelle Spain" },
-      { key: "joint-growth", title: "MS and US World Languages, Individuals and Societies (Social Studies), Arts, Design, and Physical Education and Health: Standardized K–12 Growth Assessments", leaders: "Subject Leads", focus: "Refine and finish the standardized K–12 growth assessments; plan their implementation" }
+      { key: "joint-math", title: "Math: MAP Sharing", leaders: "Kyle Gehringer", desc: DESC.mapSharing },
+      { key: "joint-english", title: "English: MAP Sharing", leaders: "Natalie Thomas", desc: DESC.mapSharing },
+      { key: "joint-science", title: "Science: MAP Proctoring Training", leaders: "Michelle Spain", desc: "Michelle trains Middle and Upper School science teachers to proctor MAP testing, so Science can administer future MAP sessions." },
+      { key: "joint-growth", title: "All other departments: Standardized K–12 Growth Assessments", leaders: "Subject Leads", desc: "Middle and Upper School subject teams refine and finish their standardized K–12 growth assessments and plan how to put them in place across grade levels." }
     ]
   };
 
@@ -432,12 +441,7 @@ h1 {
       p.appendChild(document.createTextNode(row.leaders));
       what.appendChild(p);
     }
-    if (row.focus) {
-      const p = el("p", "meta");
-      p.appendChild(el("b", null, "Focus: "));
-      p.appendChild(document.createTextNode(row.focus));
-      what.appendChild(p);
-    }
+    if (row.desc) what.appendChild(el("p", "desc", row.desc));
     const res = el("div", "resources");
     res.dataset.key = row.key;
     what.appendChild(res);
@@ -459,7 +463,7 @@ h1 {
       li.dataset.time = row.time;
       const when = el("div", "when");
       when.appendChild(el("time", null, row.time));
-      if (!row.lunch && !row.jointLink) when.appendChild(el("small", null, "Location: TBD"));
+      if (row.room) when.appendChild(el("small", "room", row.room));
       when.appendChild(el("span", "now-pill", "Happening now"));
       li.appendChild(when);
 
