@@ -162,7 +162,8 @@ h1 {
 .meta { margin: 2px 0 0; font-size: 0.95rem; }
 .meta b { font-weight: 600; color: var(--muted); }
 .desc { margin: 6px 0 0; font-size: 0.95rem; max-width: 62ch; }
-.when .room { color: var(--teal); font-weight: 600; }
+.when .room, .joint-item .room { color: var(--teal); font-weight: 600; }
+.joint-item .room { margin: 0 0 4px; }
 .note { margin: 2px 0 0; font-size: 0.92rem; color: var(--muted); font-style: italic; }
 
 .session.lunch { background: var(--band); padding: 12px 0; }
@@ -381,7 +382,7 @@ h1 {
     rows: [
       { key: "joint-math", title: "Math: MAP Sharing", leaders: "Kyle Gehringer", desc: DESC.mapSharing },
       { key: "joint-english", title: "English: MAP Sharing", leaders: "Natalie Thomas", desc: DESC.mapSharing },
-      { key: "joint-science", title: "Science: MAP Proctoring Training", leaders: "Michelle Spain", desc: "Michelle trains Middle and Upper School science teachers to proctor MAP testing, so Science can administer future MAP sessions." },
+      { key: "joint-science", title: "Science: MAP Proctoring Training", room: "Jess’s room, US 115", leaders: "Michelle Spain", desc: "Michelle trains Middle and Upper School science teachers to proctor MAP testing, so Science can administer future MAP sessions." },
       { key: "joint-growth", title: "All other departments: Standardized K–12 Growth Assessments", leaders: "Subject Leads", desc: "Middle and Upper School subject teams refine and finish their standardized K–12 growth assessments and plan how to put them in place across grade levels." }
     ]
   };
@@ -431,10 +432,12 @@ h1 {
   });
 
   // ---- Rendering
-  function sessionWhat(row, headingTag) {
+  function sessionWhat(row, headingTag, showRoom) {
     const what = el("div", "what");
     what.appendChild(el(headingTag, null, row.title));
     if (row.note) what.appendChild(el("p", "note", row.note));
+    // Joint rows share one time column, so their room sits under the title
+    if (showRoom && row.room) what.appendChild(el("p", "room", row.room));
     if (row.leaders) {
       const p = el("p", "meta");
       p.appendChild(el("b", null, "Led by: "));
@@ -497,7 +500,7 @@ h1 {
       const grid = el("ul", "joint-grid");
       JOINT.rows.forEach(row => {
         const li = el("li", "joint-item");
-        li.appendChild(sessionWhat(row, "h3"));
+        li.appendChild(sessionWhat(row, "h3", true));
         grid.appendChild(li);
       });
       sec.appendChild(grid);
